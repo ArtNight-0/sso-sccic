@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\AuthCode;
 use Laravel\Passport\RefreshToken;
@@ -45,6 +46,10 @@ class AppServiceProvider extends ServiceProvider
             'view-user' => 'View user information',
             'edit-user' => 'Edit user information',
         ]);
+
+        Gate::define('admin', function ($user) {
+        return $user->role === 'admin';
+    });
         
 
 

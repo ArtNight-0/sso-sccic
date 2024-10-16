@@ -9,457 +9,239 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <div class="mb-6">
-                        <h3 class="text-lg font-semibold mb-2">Welcome</h3>
-                        <p class="text-gray-600">{{ __("You're logged in!") }}</p>
-                    </div>
-
-                    <!-- CLIENT SECTION -->
                     <div class="mb-10">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xl font-semibold">OAuth Clients</h3>
-                            <button id="openCreateClientModal"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105">
-                                <i class="fas fa-plus-circle mr-2"></i> Create Client
-                            </button>
-                        </div>
-                        <div class="overflow-x-auto bg-white rounded-lg shadow overflow-y-auto relative">
-                            <table id="clients-table"
-                                class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
-                                <thead>
-                                    <tr class="text-left">
-                                        <th
-                                            class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-3 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                                            <i class="fas fa-id-badge mr-2"></i>ID
-                                        </th>
-                                        <th
-                                            class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-3 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                                            <i class="fas fa-user mr-2"></i>Name
-                                        </th>
-                                        <th
-                                            class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-3 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                                            <i class="fas fa-key mr-2"></i>Secret
-                                        </th>
-                                        <th
-                                            class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-3 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                                            <i class="fas fa-link mr-2"></i>Redirect
-                                        </th>
-                                        <th
-                                            class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-3 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                                            <i class="fas fa-tools mr-2"></i>Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Dynamic Rows from DataTables -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- TOKEN SECTION -->
-                    <div>
-                        <h3 class="text-xl font-semibold mb-4">Personal Access Tokens</h3>
-                        <div class="overflow-x-auto bg-white rounded-lg shadow overflow-y-auto relative">
-                            <table id="tokens-table"
-                                class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
-                                <thead>
-                                    <tr class="text-left">
-                                        <th
-                                            class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-3 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                                            <i class="fas fa-id-badge mr-2"></i>ID
-                                        </th>
-                                        <th
-                                            class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-3 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                                            <i class="fas fa-user mr-2"></i>Client
-                                        </th>
-                                        <th
-                                            class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-3 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                                            <i class="fas fa-user mr-2"></i>User ID
-                                        </th>
-                                        <th
-                                            class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-3 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                                            <i class="fas fa-ban mr-2"></i>Revoked
-                                        </th>
-                                        <th
-                                            class="bg-gray-100 sticky top-0 border-b border-gray-200 px-6 py-3 text-gray-600 font-bold tracking-wider uppercase text-xs">
-                                            <i class="fas fa-tools mr-2"></i>Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Dynamic Rows from DataTables -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- CREATE CLIENT MODAL -->
-                    <div id="createClientModal" class="fixed z-50 inset-0 hidden overflow-y-auto"
-                        aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                        <div
-                            class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true">
-                            </div>
-                            <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
-                                aria-hidden="true">&#8203;</span>
-                            <div
-                                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                        <i class="fas fa-user-plus mr-2"></i> Create New Client
-                                    </h3>
-                                    <form id="createClientForm" class="mt-4">
-                                        @csrf
-                                        <div class="mb-4">
-                                            <label for="clientName"
-                                                class="block text-gray-700 text-sm font-bold mb-2">Client Name</label>
-                                            <input type="text" name="name" id="clientName"
-                                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                required>
-                                        </div>
-                                        <div class="mb-4">
-                                            <label for="clientRedirect"
-                                                class="block text-gray-700 text-sm font-bold mb-2">Redirect URL</label>
-                                            <input type="text" name="redirect" id="clientRedirect"
-                                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                                required>
-                                        </div>
-                                    </form>
+                        <h3 class="text-2xl font-bold mb-6 text-center text-gray-800">Statistik Pengguna dan Client</h3>
+                        <div class="flex flex-wrap justify-center items-stretch">
+                            <div class="w-full md:w-1/2 p-4">
+                                <div class="bg-gray-100 rounded-lg p-6 h-full shadow-md">
+                                    <h4 class="text-lg font-semibold mb-4 text-center text-gray-700">Status Pengguna
+                                    </h4>
+                                    <canvas id="userChart"></canvas>
                                 </div>
-                                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                    <button id="saveClient" type="button"
-                                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
-                                        <i class="fas fa-save mr-2"></i> Save
-                                    </button>
-                                    <button id="cancelClientModal" type="button"
-                                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                                        Cancel
-                                    </button>
+                            </div>
+                            <div class="w-full md:w-1/2 p-4">
+                                <div class="bg-gray-100 rounded-lg p-6 h-full shadow-md">
+                                    <h4 class="text-lg font-semibold mb-4 text-center text-gray-700">Pengguna Aktif per
+                                        Client</h4>
+                                    <canvas id="clientChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Leaderboard dengan warna yang disesuaikan -->
+                        <div class="mt-10">
+                            <h3 class="text-2xl font-bold mb-6 text-center text-gray-800">Top 5 Client Leaderboard</h3>
+                            <div class="bg-gradient-to-r from-gray-100 to-gray-200 rounded-lg p-6 shadow-lg">
+                                <div id="leaderboardBody" class="space-y-4">
+                                    <!-- Data leaderboard akan diisi oleh JavaScript -->
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- EDIT CLIENT MODAL -->
-                    <div id="editClientModal" class="fixed z-50 inset-0 hidden overflow-y-auto"
-                        aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                        <!-- [The content of this modal is similar to the Create Client Modal, adjust as needed] -->
-                    </div>
-
                 </div>
             </div>
         </div>
     </div>
+
     <!-- jQuery, DataTables, SweetAlert2, and FontAwesome -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         $(document).ready(function() {
-            // Initialize DataTables for Clients
-            $('#clients-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route('clients.list') }}',
-                columns: [{
-                        data: 'id',
-                        name: 'id'
+            console.log('Client Chart Canvas:', document.getElementById('clientChart'));
+
+            function createUserChart(onlineUsers, offlineUsers) {
+                const ctx = document.getElementById('userChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Pengguna Online', 'Pengguna Offline'],
+                        datasets: [{
+                            data: [onlineUsers, offlineUsers],
+                            backgroundColor: [
+                                'rgba(75, 192, 192, 0.8)',
+                                'rgba(255, 99, 132, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(255, 99, 132, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
                     },
-                    {
-                        data: 'name',
-                        name: 'name'
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                            }
+                        },
+                        cutout: '50%'
+                    }
+                });
+            }
+
+            function createClientChart(clientStats) {
+                if (!clientStats || clientStats.length === 0) {
+                    console.error('Data clientStats kosong atau tidak valid');
+                    return;
+                }
+
+                const ctx = document.getElementById('clientChart');
+                if (!ctx) {
+                    console.error('Elemen canvas clientChart tidak ditemukan');
+                    return;
+                }
+
+                const clientNames = clientStats.map(client => client.name);
+                const activeUserCounts = clientStats.map(client => client.active_users_count);
+
+                console.log('Client Names:', clientNames);
+                console.log('Active User Counts:', activeUserCounts);
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: clientNames,
+                        datasets: [{
+                            label: 'Pengguna Aktif',
+                            data: activeUserCounts,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(75, 192, 192, 1)',
+                            tension: 0.1
+                        }]
                     },
-                    {
-                        data: 'secret',
-                        name: 'secret'
-                    },
-                    {
-                        data: 'redirect',
-                        name: 'redirect'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false,
-                        render: function(data, type, row) {
-                            return `
-                                <button class="editClient btn btn-warning" data-id="${row.id}" data-name="${row.name}" data-redirect="${row.redirect}">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="deleteClient btn btn-danger" data-id="${row.id}">
-                                    <i class="fas fa-trash-alt"></i> Delete
-                                </button>
-                            `;
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.parsed.y + ' pengguna aktif';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Jumlah Pengguna Aktif'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Client'
+                                }
+                            }
                         }
                     }
-                ]
-            });
-
-            // Initialize DataTables for Tokens
-            $('#tokens-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route('tokens.list') }}',
-                columns: [{
-                        data: 'id',
-                        name: 'id'
-                    },
-                    {
-                        data: 'client',
-                        name: 'client'
-                    },
-                    {
-                        data: 'user_id',
-                        name: 'user_id'
-                    },
-                    {
-                        data: 'revoked',
-                        name: 'revoked'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false,
-                        render: function(data, type, row) {
-                            return `
-                                <button class="revokeToken btn btn-warning" data-id="${row.id}">
-                                    <i class="fas fa-ban"></i> Revoke
-                                </button>
-                                <button class="deleteToken btn btn-danger" data-id="${row.id}">
-                                    <i class="fas fa-trash-alt"></i> Delete
-                                </button>
-                            `;
-                        }
-                    }
-                ]
-            });
-
-            // Create Client Modal
-            $('#openCreateClientModal').click(function() {
-                $('#createClientModal').removeClass('hidden');
-            });
-            $('#cancelClientModal').click(function() {
-                $('#createClientModal').addClass('hidden');
-            });
-
-            // Edit Client Modal
-            $(document).on('click', '.editClient', function() {
-                let clientId = $(this).data('id');
-                let clientName = $(this).data('name');
-                let clientRedirect = $(this).data('redirect');
-
-                $('#editClientId').val(clientId);
-                $('#editName').val(clientName);
-                $('#editRedirect').val(clientRedirect);
-                $('#editClientModal').removeClass('hidden');
-            });
-
-            // Close Edit Modal
-            $('#cancelEditClientModal').click(function() {
-                $('#editClientModal').addClass('hidden');
-            });
-
-            // Save New Client
-            // Save New Client
-            $('#saveClient').click(function(e) {
-                e.preventDefault();
-
-                let name = $('#clientName').val();
-                let redirect = $('#clientRedirect').val();
-
-                $.ajax({
-                    url: '{{ route('clients.create') }}',
-                    type: 'POST',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        name: name,
-                        redirect: redirect,
-                    },
-                    success: function(response) {
-                        $('#createClientModal').addClass('hidden');
-                        $('#createClientForm')[0].reset();
-                        $('#clients-table').DataTable().ajax.reload();
-
-                        // Display the client secret with copy button
-                        Swal.fire({
-                            title: 'Client Created Successfully!',
-                            html: `
-                    <p>Client ID: ${response.client_id}</p>
-                    <p>
-                        Client Secret: 
-                        <input type="text" id="clientSecret" value="${response.client_secret}" readonly style="width: 60%; border: none; background: transparent;">
-                        <button id="copySecret" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
-                            <i class="fas fa-copy"></i> Copy
-                        </button>
-                    </p>
-                    <p><strong>Important:</strong> Please copy and save this secret now. You won't be able to see it again!</p>
-                `,
-                            icon: 'success',
-                            confirmButtonText: 'I have copied the secret',
-                            didRender: () => {
-                                document.getElementById('copySecret')
-                                    .addEventListener('click', function() {
-                                        const secretInput = document
-                                            .getElementById('clientSecret');
-                                        secretInput.select();
-                                        secretInput.setSelectionRange(0,
-                                            99999); // For mobile devices
-
-                                        try {
-                                            document.execCommand('copy');
-                                            Swal.showValidationMessage(
-                                                'Secret copied to clipboard!'
-                                            );
-                                            setTimeout(() => Swal
-                                                .resetValidationMessage(),
-                                                1500);
-                                        } catch (err) {
-                                            Swal.showValidationMessage(
-                                                'Failed to copy: ' + err);
-                                        }
-                                    });
-                            }
-                        });
-                    },
-                    error: function(response) {
-                        console.log(response);
-                        Swal.fire('Error!', 'Failed to create client!', 'error');
-                    }
                 });
-            });
+            }
 
-            // Update Client via AJAX
-            $('#updateClient').click(function(e) {
-                e.preventDefault();
+            function updateLeaderboard(clientStats) {
+                const leaderboardBody = document.getElementById('leaderboardBody');
+                leaderboardBody.innerHTML = '';
 
-                let id = $('#editClientId').val();
-                let name = $('#editName').val();
-                let redirect = $('#editRedirect').val();
+                // Urutkan clientStats berdasarkan jumlah pengguna aktif
+                const sortedClients = clientStats.sort((a, b) => b.active_users_count - a.active_users_count);
 
-                $.ajax({
-                    url: '{{ route('clients.update') }}',
-                    type: 'PUT',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        id: id,
-                        name: name,
-                        redirect: redirect,
-                    },
-                    success: function(response) {
-                        $('#editClientModal').addClass('hidden');
-                        $('#clients-table').DataTable().ajax.reload();
-                        Swal.fire('Success!', 'Client updated successfully!', 'success');
-                    },
-                    error: function(response) {
-                        Swal.fire('Error!', 'Failed to update client!', 'error');
-                    }
+                // Ambil 5 client teratas
+                const topClients = sortedClients.slice(0, 5);
+
+                const pastelColors = [
+                    'bg-red-100 text-red-800',
+                    'bg-yellow-100 text-yellow-800',
+                    'bg-green-100 text-green-800',
+                    'bg-blue-100 text-blue-800',
+                    'bg-pink-100 text-pink-800'
+                ];
+
+                topClients.forEach((client, index) => {
+                    const row = `
+                        <div class="flex items-center bg-white rounded-lg p-4 shadow-md transform transition duration-300 hover:scale-105" style="opacity: 0; animation: fadeIn 0.5s ease-out forwards ${index * 0.1}s;">
+                            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-gray-200 rounded-full mr-4">
+                                <span class="text-2xl font-bold text-gray-700">${index + 1}</span>
+                            </div>
+                            <div class="flex-grow">
+                                <h4 class="text-lg font-semibold text-gray-800">${client.name}</h4>
+                                <p class="text-sm text-gray-600">${client.active_users_count} pengguna aktif</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <span class="inline-block px-3 py-1 ${pastelColors[index]} rounded-full text-sm font-semibold">
+                                    ${client.active_users_count} <i class="fas fa-user-circle ml-1"></i>
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                    leaderboardBody.innerHTML += row;
                 });
-            });
+            }
 
-            // Delete Client via AJAX with SweetAlert
-            $(document).on('click', '.deleteClient', function() {
-                let clientId = $(this).data('id');
+            // Gunakan data yang dikirim langsung dari controller
+            try {
+                createUserChart({{ $onlineUsers }}, {{ $offlineUsers }});
+                createClientChart(@json($clientStats));
+                updateLeaderboard(@json($clientStats));
+            } catch (error) {
+                console.error('Error saat membuat chart atau leaderboard:', error);
+            }
 
+            // console.log untuk debugging
+            console.log('Login success:', {{ json_encode(session('login_success')) }});
+            console.log('Welcome shown:', {{ json_encode(session('welcome_shown')) }});
+
+            @if (session('login_success') && !session('welcome_shown'))
+                console.log('Menampilkan SweetAlert');
                 Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '/clients/' + clientId,
-                            type: 'DELETE',
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                            },
-                            success: function(response) {
-                                $('#clients-table').DataTable().ajax.reload();
-                                Swal.fire('Deleted!', 'Client has been deleted.',
-                                    'success');
-                            },
-                            error: function() {
-                                Swal.fire('Error!', 'Failed to delete client!',
-                                    'error');
-                            }
-                        });
-                    }
+                    title: 'Selamat Datang!',
+                    text: '{{ __('Anda telah berhasil masuk!') }}',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
                 });
-            });
-
-            // Revoke Token via AJAX with SweetAlert
-            $(document).on('click', '.revokeToken', function() {
-                let tokenId = $(this).data('id');
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "This token will be revoked!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, revoke it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '/tokens/' + 'revoke/' + tokenId,
-                            type: 'POST',
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                            },
-                            success: function(response) {
-                                $('#tokens-table').DataTable().ajax.reload();
-                                Swal.fire('Revoked!', 'Token has been revoked.',
-                                    'success');
-                            },
-                            error: function() {
-                                Swal.fire('Error!', 'Failed to revoke token!', 'error');
-                            }
-                        });
-                    }
-                });
-            });
-
-            // Delete Token via AJAX with SweetAlert
-            $(document).on('click', '.deleteToken', function() {
-                let tokenId = $(this).data('id');
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: '/tokens/' + tokenId,
-                            type: 'DELETE',
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                            },
-                            success: function(response) {
-                                $('#tokens-table').DataTable().ajax.reload();
-                                Swal.fire('Deleted!', 'Token has been deleted.',
-                                    'success');
-                            },
-                            error: function() {
-                                Swal.fire('Error!', 'Failed to delete token!', 'error');
-                            }
-                        });
-                    }
-                });
-            });
+                @php
+                    session(['welcome_shown' => true]);
+                @endphp
+            @else
+                console.log('Tidak menampilkan SweetAlert');
+            @endif
         });
     </script>
+
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #userChart,
+        #clientChart {
+            height: 300px !important;
+        }
+    </style>
+
+    <a href="{{ route('logout.all') }}">Logout dari Semua Aplikasi</a>
 </x-app-layout>

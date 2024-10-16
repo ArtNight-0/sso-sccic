@@ -1,10 +1,22 @@
 <?php
 
+use App\Http\Controllers\api\SSOController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/tokens', [SSOController::class, 'listTokens']);
+    Route::post('/tokens/{id}/revoke', [SSOController::class, 'revokeToken']);
+    Route::delete('/tokens/{id}', [SSOController::class, 'deleteToken']);
+
+    Route::post('/clients', [SSOController::class, 'createClient']);
+    Route::put('/clients/{id}', [SSOController::class, 'updateClient']);
+    Route::delete('/clients/{id}', [SSOController::class, 'deleteClient']);
+});
 
 // Authentication Routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -13,8 +25,8 @@ Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']
 Route::middleware('auth:api')->post('/logout-all', [AuthController::class, 'globalLogout']);
 
 // Client & Token Management Routes
-Route::get('/clients', [DashboardController::class, 'listClients']);
-Route::get('/tokens', [DashboardController::class, 'listTokens']);
+Route::get('/clients', [SSOController::class, 'listClients']);
+// Route::get('/tokens', [DashboardController::class, 'listTokens']);
 
 // Route to Get User Info
 Route::middleware(['auth:api', 'scope:view-user'])->get('/user', function (Request $request) {
@@ -39,6 +51,17 @@ Route::middleware('auth:api')->get('/logmeout', function (Request $request) {
         'session' => session()->all()
     ]);
 });
+
+
+
+
+
+
+
+
+
+
+
 
 // Route::post('/register', [AuthController::class, 'register']);
 // Route::post('/login', [AuthController::class, 'login']);
