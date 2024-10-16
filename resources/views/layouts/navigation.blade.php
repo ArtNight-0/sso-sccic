@@ -76,7 +76,7 @@
                             <x-dropdown-link :href="route('logout.all')"
                                 onclick="event.preventDefault();
                                             this.closest('form').submit();">
-                                {{ __('Logout dari Semua Aplikasi') }}
+                                {{ __('Logout dari Semua Aplikasi ') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
