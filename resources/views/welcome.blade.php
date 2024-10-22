@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>SSO-SmartX</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
@@ -14,13 +14,13 @@
 <body class="antialiased bg-gray-100 dark:bg-gray-900">
     <div class="min-h-screen flex flex-col">
         <header class="bg-white dark:bg-gray-800 shadow">
-            <nav class="container mx-auto px-6 py-3">
-                <div class="flex justify-between items-center">
+            <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                <div class="flex flex-wrap justify-between items-center">
                     <div class="text-xl font-semibold text-gray-800 dark:text-white">
                         SSO-SmartX
                     </div>
                     @if (Route::has('login'))
-                        <div class="space-x-4">
+                        <div class="space-x-4 mt-2 sm:mt-0">
                             @auth
                                 <a href="{{ url('/dashboard') }}"
                                     class="text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">Dashboard</a>
@@ -39,15 +39,15 @@
             </nav>
         </header>
 
-        <main class="flex-grow container mx-auto px-6 py-8">
-            <h1 class="text-4xl font-bold text-center text-gray-800 dark:text-white mb-8">
+        <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 dark:text-white mb-8">
                 Selamat Datang di SSO-SmartX
             </h1>
 
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Penggunaan di Aplikasi Klien
-                        Non-Laravel</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow">
+                    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-white mb-4">Penggunaan di
+                        Aplikasi Klien Non-Laravel</h2>
                     <p class="text-gray-600 dark:text-gray-300 mb-4">
                         Untuk menggunakan SSO-SmartX di aplikasi klien non-Laravel, ikuti langkah-langkah berikut:
                     </p>
@@ -93,9 +93,9 @@
                     </pre>
                 </div>
 
-                <!-- Bagian baru untuk informasi skema SSO -->
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Skema SSO SmartX</h2>
+                <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow">
+                    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-white mb-4">Skema SSO SmartX
+                    </h2>
                     <p class="text-gray-600 dark:text-gray-300 mb-4">
                         SSO-SmartX menggunakan arsitektur terpusat dengan komponen utama sebagai berikut:
                     </p>
@@ -135,9 +135,9 @@
                     </ol>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow md:col-span-2">
-                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Penggunaan SSO-SmartX sebagai
-                        Server</h2>
+                <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow md:col-span-2">
+                    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-white mb-4">Penggunaan
+                        SSO-SmartX sebagai Server</h2>
                     <p class="text-gray-600 dark:text-gray-300 mb-4">
                         SSO-SmartX berfungsi sebagai server SSO yang memungkinkan Anda mengelola otentikasi terpusat
                         untuk berbagai aplikasi. Berikut adalah langkah-langkah penggunaan SSO-SmartX sebagai server:
@@ -169,9 +169,9 @@
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow md:col-span-2">
-                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Fitur Utama SSO-SmartX Server
-                    </h2>
+                <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow md:col-span-2">
+                    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-white mb-4">Fitur Utama
+                        SSO-SmartX Server</h2>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
                         <li class="mb-2">Manajemen aplikasi klien terpusat</li>
                         <li class="mb-2">Pembuatan dan pengelolaan Client ID dan Client Secret otomatis</li>
@@ -182,7 +182,7 @@
         </main>
 
         <footer class="bg-white dark:bg-gray-800 shadow mt-8">
-            <div class="container mx-auto px-6 py-3 text-center text-gray-600 dark:text-gray-400">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-3 text-center text-gray-600 dark:text-gray-400">
                 <p>&copy; {{ date('Y') }} SSO-SmartX. All rights reserved.</p>
                 <p class="mt-2">Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
                 </p>

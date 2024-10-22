@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 // use App\Models\Client;
 use Laravel\Passport\Client;
+use Laravel\Passport\Token;
 
 class AuthController extends Controller
 {
@@ -97,25 +99,33 @@ public function globalLogout(Request $request)
     {
         $user = Auth::user();
         
-        // Dapatkan semua client yang terdaftar di Passport
-        $clients = Client::all();
+        // Ambil semua token yang aktif untuk user ini
+        $activeTokens = $user->tokens()->where('revoked', 0)->get();
         
-        foreach ($clients as $client) {
-            // Revoke semua token untuk user ini di setiap client
-            $user->tokens->where('client_id', $client->id)->each(function ($token) {
-                $token->revoke();
-            });
-            
-            // Jika Anda masih ingin mengirim permintaan logout ke setiap client,
-            // Anda perlu menambahkan kolom logout_url ke tabel oauth_clients
-            // dan menggunakan $client->logout_url di sini
-        }
+        // Ambil informasi client untuk setiap token
+        $connectedClients = $activeTokens->map(function ($token) {
+            return [
+                'token_id' => $token->id,
+                'client_id' => $token->client_id,
+                'client_name' => $token->client->name,
+                'created_at' => $token->created_at,
+                'expires_at' => $token->expires_at,
+            ];
+        });
         
-        // Logout dari aplikasi SSO
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        // Tampilkan informasi client yang terhubung
+        dd([
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'connected_clients' => $connectedClients
+        ]);
         
-        return redirect('/')->with('status', 'Anda telah berhasil logout dari semua aplikasi.');
+        // pause code
+        // $user->tokens()->delete();
+        // Cache::forget('user_' . $user->id . '_tokens');
+        // Auth::logout();
+        // $request->session()->invalidate();
+        // $request->session()->regenerateToken();
+        // return redirect('/')->with('status', 'Anda telah berhasil logout dari semua aplikasi.');
     }
 }

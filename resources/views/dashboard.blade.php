@@ -242,6 +242,4 @@
             height: 300px !important;
         }
     </style>
-
-    <a href="{{ route('logout.all') }}">Logout dari Semua Aplikasi</a>
 </x-app-layout>
