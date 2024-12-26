@@ -1,66 +1,283 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel API Authentication with Passport
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This Laravel application uses Laravel Passport for API authentication. Below are the instructions for setting up and using the authentication system.
 
-## About Laravel
+## Requirements
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.1 or higher
+- Composer
+- MySQL/PostgreSQL
+- Laravel 10.x
+- Node.js & NPM
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## First Time Project Setup
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. Clone the repository
+```bash
+git clone <your-repository-url>
+cd <project-folder>
+```
 
-## Learning Laravel
+2. Install PHP dependencies
+```bash
+composer install
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. Install Node dependencies
+```bash
+npm install
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+4. Set up environment file
+```bash
+cp .env.example .env
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+5. Generate application key
+```bash
+php artisan key:generate
+```
 
-## Laravel Sponsors
+6. Configure database in `.env` file
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+7. Run database migrations and seeders
+```bash
+php artisan migrate --seed
+```
 
-### Premium Partners
+8. Install Passport
+```bash
+# Install passport package (if not already in composer.json)
+composer require laravel/passport
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+# Run passport migrations
+php artisan migrate
+
+# Install passport encryption keys and clients
+php artisan passport:install
+```
+
+9. Link storage
+```bash
+php artisan storage:link
+```
+
+10. Clear all cache
+```bash
+php artisan optimize:clear
+# OR run these individually:
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
+```
+
+11. Build assets
+```bash
+npm run build
+# For development with HMR:
+# npm run dev
+```
+
+12. Start the development server
+```bash
+php artisan serve
+```
+
+Your application should now be running at `http://localhost:8000`
+
+## Maintenance Commands
+
+Here are some useful commands for maintaining your application:
+
+```bash
+# Clear all cache and reload configurations
+php artisan optimize:clear
+
+# Recompile all classes
+composer dump-autoload
+
+# Clear composer cache
+composer clear-cache
+
+# Update composer dependencies
+composer update
+
+# Update npm packages
+npm update
+
+# Rebuild node modules (if having issues)
+rm -rf node_modules
+rm package-lock.json
+npm install
+
+# Reset database and run seeders
+php artisan migrate:fresh --seed
+
+# Clear and reset Passport
+php artisan passport:client --purge
+php artisan passport:install
+```
+
+## Passport Configuration
+
+1. Add HasApiTokens trait to User model (`app/Models/User.php`):
+```php
+use Laravel\Passport\HasApiTokens;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable;
+    // ...
+}
+```
+
+2. Configure Passport in `config/auth.php`:
+```php
+'guards' => [
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
+    ],
+    'api' => [
+        'driver' => 'passport',
+        'provider' => 'users',
+    ],
+],
+```
+
+## API Routes
+
+Configure your API routes in `routes/api.php`:
+
+```php
+Route::middleware('auth:api')->group(function () {
+    // Your protected routes here
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+});
+```
+
+## Authentication Endpoints
+
+### Register User
+```http
+POST /api/register
+Content-Type: application/json
+
+{
+    "name": "User Name",
+    "email": "user@example.com",
+    "password": "password",
+    "password_confirmation": "password"
+}
+```
+
+### Login
+```http
+POST /api/login
+Content-Type: application/json
+
+{
+    "email": "user@example.com",
+    "password": "password"
+}
+```
+
+### Logout
+```http
+POST /api/logout
+Authorization: Bearer {token}
+```
+
+## Using Access Tokens
+
+After successful login, you'll receive an access token. Use this token in subsequent requests:
+
+```http
+GET /api/user
+Authorization: Bearer {your-token-here}
+```
+
+## Managing Passport Clients
+
+### Create Password Grant Client
+```bash
+php artisan passport:client --password
+```
+
+### Create Personal Access Client
+```bash
+php artisan passport:client --personal
+```
+
+### Clear All Clients
+```bash
+php artisan passport:client --purge
+```
+
+## Token Configuration
+
+You can modify token lifetimes in `app/Providers/AuthServiceProvider.php`:
+
+```php
+public function boot()
+{
+    $this->registerPolicies();
+
+    Passport::tokensExpireIn(now()->addDays(15));
+    Passport::refreshTokensExpireIn(now()->addDays(30));
+    Passport::personalAccessTokensExpireIn(now()->addMonths(6));
+}
+```
+
+## Troubleshooting
+
+If you encounter any issues, try these steps:
+
+1. Clear all cache and recompile
+```bash
+php artisan optimize:clear
+composer dump-autoload
+```
+
+2. Check permissions on storage and bootstrap/cache folders
+```bash
+chmod -R 775 storage bootstrap/cache
+```
+
+3. If database issues occur
+```bash
+php artisan migrate:fresh --seed
+```
+
+4. If Passport issues occur
+```bash
+php artisan passport:client --purge
+php artisan passport:install
+```
+
+## Security
+
+- Always use HTTPS in production
+- Keep your client secrets secure
+- Regularly rotate tokens
+- Use appropriate token expiration times
+- Validate all input data
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
